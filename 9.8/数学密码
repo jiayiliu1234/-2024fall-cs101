@@ -1,0 +1,15 @@
+is_found = False
+n = int(input())
+for i in range(6, n):
+    if n % i == 0:
+        ans = n // i
+        is_found = True
+        break
+if is_found:
+    print(ans)
+elif n % 3 == 0 and n // 3 >= 6:
+    print(3)
+elif n % 2 == 0 and n // 2 >= 6:
+    print(2)
+else:
+    print(1)
