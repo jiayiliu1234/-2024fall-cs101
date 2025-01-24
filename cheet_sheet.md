@@ -16,86 +16,12 @@
 
 6. **避免副作用**：在某些情况下，使用 `None` 作为函数参数可以避免不必要的副作用。
 
-7. **兼容性**：在一些旧的代码或库中，可能会使用 `None` 来表示某些特定的状态或条件。
+7. **类型检查**：在进行类型检查时，可以使用 `is None` 来确定一个变量是否为 `None`。
 
-8. **类型检查**：在进行类型检查时，可以使用 `is None` 来确定一个变量是否为 `None`。
-
-以下是一些使用 `None` 的示例：
-
-```python
-def my_function(param=None):
-    if param is None:
-        print("没有提供参数")
-    else:
-        print("参数的值是：", param)
-
-my_function()  # 输出: 没有提供参数
-my_function(123)  # 输出: 参数的值是： 123
-
-# 检查变量是否为空
-value = None
-if value is None:
-    print("变量是空的")
-else:
-    print("变量有值")
-
-# 使用 None 作为占位符
-my_list = [None] * 5  # 创建一个包含5个 None 的列表
-```
 
 ### 2.活用字典：
 
 在字典中查找元素的平均时间复杂度为O（1），因此在一些含有搜索的题目中，我们不仅可以使用列表的查找/二分查找，还可以使用字典的查找。
-
-### 3.字典的一些基本操作：
-
-##### 删除键值对
-
-使用 `del` 语句或 `pop()` 方法删除键值对。
-
-```python
-del my_dict['key1']  # 删除键为 'key1' 的键值对
-
-# 使用 pop 方法，同时获取删除的值，None为未找到该键时的默认返回值
-removed_value = my_dict.pop('key2', None)
-```
-
-##### 遍历字典
-
-遍历字典时，可以遍历键、值或键值对。
-
-```python
-for key in my_dict:
-    print(key)  # 遍历所有键
-
-for value in my_dict.values():
-    print(value)  # 遍历所有值
-
-for key, value in my_dict.items():
-    print(f'{key}: {value}')  # 遍历所有键值对
-```
-
-##### 检查键是否存在
-
-使用 `in` 关键字检查键是否存在于字典中。
-
-##### 获取所有键或值的列表
-
-使用 `keys()`、`values()` 或 `items()` 方法。
-
-```python
-keys = my_dict.keys()  # 返回所有键的视图
-values = my_dict.values()  # 返回所有值的视图
-items = my_dict.items()  # 返回所有键值对的视图
-```
-
-##### 更新字典
-
-使用 `update()` 方法更新字典。
-
-```python
-my_dict.update({'key4': 'value4', 'key5': 'value5'})
-```
 
 ### ASCLL表
 
@@ -103,11 +29,221 @@ A：65
 
 a：97
 
-## 二、小型的技巧
+用ord()函数获取一个字符的ascll值，用str()函数来获取一个ascll值对应的字符
 
-1. 当一个字符串用在条件判断中时，是用来判断这个字符串是否为空的。
+### 双指针
+
+双指针是一种常用的编程技巧，涉及使用两个指针变量来遍历或操作数据结构，尤其是在数组或链表中。这种技术可以用于解决各种问题，如搜索、排序和数据处理。双指针方法的优势在于它能够提供高效的解决方案，同时减少时间和空间复杂度。
+
+#### 双指针的常见用途包括：
+
+1. **搜索和排序**：
+   - **查找两个元素的和**：在数组中使用双指针查找和为目标值的两个元素。
+   - **移动元素**：使用双指针将数组中的元素移动到特定位置。
+
+2. **数据验证**：
+   - **检查回文**：使用双指针从两端向中心遍历字符串或链表，检查是否为回文。
+   - **验证有序数组**：使用双指针检查数组是否有序或满足特定条件。
+
+3. **删除和替换**：
+   - **删除重复元素**：使用双指针删除数组中的重复元素。
+   - **替换元素**：使用双指针在数组中替换特定元素。
+
+4. **滑动窗口问题**：
+   - **最大子数组和**：使用双指针维护一个滑动窗口，求解最大子数组和问题。
+   - **子字符串问题**：使用双指针处理涉及连续字符的问题。
+
+#### 双指针的实现示例：
+
+##### 示例1：查找数组中和为目标值的两个元素
+
+使用两个指针 `left` 和 `right` 从数组的两端开始遍历，寻找和为目标值的两个元素。
+
+##### 示例2：检查回文链表
+
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def is_palindrome(head: ListNode) -> bool:
+    if not head:
+        return True
+    
+    # 找到中间节点
+    slow = fast = head
+    while fast and fast.next:
+        fast = fast.next.next
+        slow = slow.next
+    
+    # 反转后半部分
+    prev = None
+    current = slow
+    while current:
+        next_temp = current.next
+        current.next = prev
+        prev = current
+        current = next_temp
+    
+    # 比较前半部分和反转后的后半部分
+    left, right = head, prev
+    while right:
+        if left.val != right.val:
+            return False
+        left = left.next
+        right = right.next
+    
+    return True
+
+# 示例
+# 构建链表 1 -> 2 -> 2 -> 1
+head = ListNode(1, ListNode(2, ListNode(2, ListNode(1))))
+print(is_palindrome(head))  # 输出: True
+```
+
+在这个例子中，我们使用双指针 `slow` 和 `fast` 来找到链表的中间节点，然后反转后半部分，并比较前半部分和反转后的后半部分是否相同，以检查链表是否为回文。
+
+双指针技术是一种强大的工具，可以帮助你解决各种算法问题，特别是在处理数组和链表时。通过有效地使用双指针，你可以提高算法的效率，减少不必要的计算和内存使用。
+
+### sys库
+
+sys库提供了访问 Python 解释器和它的环境的方法。这个模块包含了与 Python 解释器和它的环境有关的功能，比如读取命令行参数、管理解释器的参数、处理操作系统信号等。
+
+```python
+sys.setrecursionlimit(20000)
+```
+
+这个命令通常会在深度优先搜索等有可能会爆栈的地方进行使用
+
+#### yield方法
+
+`yield` 关键字使得函数变成了一个生成器（generator），这个生成器是一个可迭代对象。每次对生成器进行迭代时，它会返回一个值，然后暂停执行，直到下一次迭代请求值时再从上次暂停的地方继续执行。
+
+这个过程可以分解为以下几个步骤：
+
+1. **启动生成器**：当生成器函数第一次被调用时，它开始执行，直到遇到第一个 `yield` 语句。
+2. **返回值**：当执行到 `yield` 语句时，生成器函数会返回 `yield` 后面指定的值，并将当前函数的状态（如变量值、执行位置等）保存起来。
+3. **暂停和保存状态**：函数执行暂停，但不会结束。所有局部变量和当前的执行状态都被保存，以便下次从同一位置继续执行。
+4. **恢复执行**：当生成器再次被请求下一个值时（通常是通过 `next()` 函数或在循环中迭代），函数从上次 `yield` 语句之后继续执行，直到遇到下一个 `yield` 语句或函数结束。
+5. **结束迭代**：当生成器函数执行到末尾或遇到一个 `return` 语句（在生成器中通常不使用 `return`）时，它会抛出一个 `StopIteration` 异常，表示迭代结束。
+
+这个过程可以重复进行，直到生成器函数执行完毕，这就是为什么生成器可以逐个产生一系列值的原因。这种机制使得生成器在处理大数据集或需要按需产生值的场景中非常有用，因为它不需要一次性将所有数据加载到内存中。
+
+例子：
+
+```python
+n = int(input())
+l = []
+for i in range(1,n+1):
+    l.append(f'{i}')
+def arrange(l):
+    if len(l) == 1:
+        yield l[0]
+    else:
+        for i in range(len(l)):
+            new_l = l[:i] + l[i+1:]
+            for rest in arrange(new_l):
+                yield l[i] + ' ' + rest
+for ans in arrange(l):
+    print(ans)
+```
+
+#### operator库：提供运算符（在波兰表达式中用到）
+
+在Python中，`operator` 模块提供了一个函数的字典，这些函数对应于Python内置的运算符。这个模块主要用于那些需要操作符功能，但又需要以函数形式来使用它们的场景，比如在编写函数式编程风格代码时，或者在需要将操作符作为参数传递给其他函数时。
+
+以下是`operator`模块中一些常用函数的简介：
+
+1. `add(x, y)`：对应于 `+` 运算符，返回x和y的和。
+2. `sub(x, y)`：对应于 `-` 运算符，返回x减去y的结果。
+3. `mul(x, y)`：对应于 `*` 运算符，返回x和y的乘积。
+4. `truediv(x, y)`：对应于 `/` 运算符，返回x除以y的结果（返回浮点数）。
+5. `floordiv(x, y)`：对应于 `//` 运算符，返回x除以y的商，向下取整。
+6. `mod(x, y)`：对应于 `%` 运算符，返回x除以y的余数。
+7. `pow(x, y)`：对应于 `**` 运算符，返回x的y次幂。
+8. `eq(x, y)`：对应于 `==` 运算符，如果x等于y则返回True，否则返回False。
+9. `ne(x, y)`：对应于 `!=` 运算符，如果x不等于y则返回True，否则返回False。
+10. `gt(x, y)`：对应于 `>` 运算符，如果x大于y则返回True，否则返回False。
+11. `lt(x, y)`：对应于 `<` 运算符，如果x小于y则返回True，否则返回False。
+12. `ge(x, y)`：对应于 `>=` 运算符，如果x大于或等于y则返回True，否则返回False。
+13. `le(x, y)`：对应于 `<=` 运算符，如果x小于或等于y则返回True，否则返回False。
+14. `not_(x)`：对应于 `not` 运算符，如果x为False则返回True，否则返回False。
+15. `and_(x, y)`：对应于 `and` 运算符，如果x和y都为True则返回True，否则返回False。
+16. `or_(x, y)`：对应于 `or` 运算符，如果x或y至少有一个为True则返回True，否则返回False。
+
+此外，`operator` 模块还提供了一些其他有用的函数，比如：
+
+- `itemgetter`：用于获取对象的属性或元素。
+- `attrgetter`：用于获取对象的属性。
+- `methodcaller`：用于调用对象的方法。
+
+使用`operator`模块的一个简单例子：
+
+```python
+import operator
+
+# 使用add函数
+result = operator.add(5, 3)
+print(result)  # 输出: 8
+
+# 使用gt函数
+is_greater = operator.gt(10, 5)
+print(is_greater)  # 输出: True
+
+# 使用itemgetter函数
+my_list = [(1, 2), (3, 4), (5, 6)]
+first_elements = map(operator.itemgetter(0), my_list)
+print(list(first_elements))  # 输出: [1, 3, 5]
+```
+
+`operator`模块提供了一种方便的方式来以函数的形式使用Python的内置运算符，这在编写更灵活和可重用的代码时非常有用。
+
+## 二、小型的技巧与知识点
+
+1. 一些python常见内置函数的时间复杂度：https://www.ics.uci.edu/~pattis/ICS-33/lectures/complexitypython.txt
+1. #pylint: skip-file 放在代码前，跳过静态编译
+1. `st = input().split(' ', 1)`，后面的1表示最多分割1次，这样能避免一些正则表达式的使用
+1. `rstrip()`方法和`lstrip()`方法：从字符串的左/右删去某个指定的字符，直到不是这个字符为止
+1. `cmp_to_key`函数：将一个正常的函数转化为一个key函数，可以传递到诸如`bisect_left()`等函数中。在使用时需从functools库中进行引用
+1. `exit()`用于退出程序，在多线程的时候会终止整个程序
+1. 在`functool`库中的`lru_cache`修饰器，在方法前通过`@lru_cache`来使用，效果很好
 
 ## 三、一些常见的函数或者变量名称
 
 - BinarySearch：二分搜索，函数中常用target代表搜索的对象
 - Euler_sieve：欧拉筛
+
+## 四、常见算法的特点总结
+
+#### 1.dfs深度优先算法和bfs广度优先算法
+
+这两个算法比较适合用来做走迷宫等类型的题目
+
+- 深度优先算法的底层逻辑是**栈**=>先进后出，先正向到达最深处，再反向回来。使用栈的方法是进行递归，直到到某个结束条件为止。一般会通过标记新点与旧点来进行区分，这张图对dfs的原理总结的很好。深搜适合于最优解的寻找（通过遍历法）或者是图的遍历
+
+  ![image-20241015153455120](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20241015153455120.png)
+
+  ![image-20241015160121446](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20241015160121446.png)
+
+- 广度优先搜索的底层逻辑是**队列**=>先进先出，优先将同一级的先遍历完
+
+#### Kadane算法
+
+一维的`Kadane`算法：相当于一个数组和的dp
+
+二维的`Kadane`算法：也就是最大子矩阵：遍历数组的开始和结束坐标，对每个区间和应用`Kadane`算法
+
+#### Dijstra算法
+
+Dijstra算法适用于有向无环图，且要求图的所有边权都非负。其代码的主要逻辑是：
+
+1. 找到最便宜的节点，即可在最短时间内前往的节点。
+2. 对于该节点的邻居，检查是否有通往它们的更短路径，如果有，就更新其开销
+3. 重复这个过程，直到对图中的所有节点都这样做了（其实只用处理掉通往终点为止）
+4. 计算最终路径
+
+Dijstra算法的最优性可以这样考虑：由于节点没有负边权，因此每个节点一旦在表中是最短的路径，那就不会有比这个更短的路径出现了。那么就可以更新这个节点周围的其他节点。
+
+**为什么Dijstra算法不适用于有环的图？**似乎是可以的
+
